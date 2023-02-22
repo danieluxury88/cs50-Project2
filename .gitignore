@@ -1,1 +1,7 @@
 *.pyc
+*.iml
+*.xml
+*.sqlite3
+/.idea/commerce.iml
+/.idea/commerce.iml
+/.idea/misc.xml
