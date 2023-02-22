@@ -16,12 +16,17 @@ class Category(models.Model):
 class Auction(models.Model):
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=500)
-    starting_big = models.FloatField()
+    starting_price = models.IntegerField()
+    current_price = models.IntegerField()
     image_url = models.URLField(max_length=100)
 
     publisher = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=None)
     status = models.BooleanField(default=True)
+
+
+    def __str__(self):
+        return f"{self.title} Publisher: {self.publisher}"
 
 
 class Bid(models.Model):
