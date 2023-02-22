@@ -5,5 +5,22 @@ Design an eBay-like e-commerce site that allows post auction listing, place bids
 This project belongs to SQL, Models and Migrations chapter.
 
 ## Knowledge
-* Django models and forms
-* Django decorators
+- See [Django's Model field reference.](https://docs.djangoproject.com/en/4.0/ref/models/fields/)
+- See [Django's forms.](https://docs.djangoproject.com/en/4.0/topics/forms/)
+- Django decorators
+  - Add @login_required decorator on any view to grant access to logged in users.
+
+## Tasks
+- [ ] Create superuser **python manage.py createsuperuser**
+- [ ] Create models: user, auction listing, bids, comments.
+- [ ] Create listings: allow user to enter title, description, starting bid, image URL, category.
+- [ ] Active listings page: default page with active listings.
+- [ ] Listings page: Clicking on a listing should take to listing details.
+  - [ ] Add/Remove from watchlist.
+  - [ ] Place valid bid.
+  - [ ] If owner, ability to close bid.
+  - [ ] Notify if auction has been won.
+  - [ ] Allow comments.
+- [ ] Watchlist page.
+- [ ] Categories page.
+- [ ] Admin interface to view, add, edit, delete listings, comments and bids.
