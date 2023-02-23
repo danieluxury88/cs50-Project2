@@ -113,3 +113,15 @@ def post_comment(request):
         auction_comment.save()
 
     return details(request, auction_id)
+
+
+def close_auction(request, auction_id):
+    auction = Auction.objects.get(pk=auction_id)
+    auction.status = False
+    auction.save()
+    messages.warning(request, 'Auction closed!')
+    return details(request, auction_id)
+
+
+
+

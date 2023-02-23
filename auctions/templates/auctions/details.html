@@ -2,6 +2,14 @@
 
 {% block body %}
 
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
 <img src="{{auction.image_url}}" class="img-fluid" alt="vehicle image">
 <h3>{{ auction.title }}</h3>
 <div>
@@ -14,14 +22,6 @@
         </div>
     </div>
 </div>
-
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
 
 <h5 class="mb-1">Comments:</h5>
 {% for comment in comments %}
@@ -51,9 +51,14 @@
 </form>
 
 {% if auction.publisher == user %}
-<div class="form-group">
-    <input type="submit" class="btn btn-info" value="Close auction">
-</div>
+    {% if auction.status == True %}
+    <form action ="{% url 'close_auction' auction.id %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <input type="submit" value="Close auction">
+        </div>
+    </form>
+    {% endif %}
 {% else %}
 <div class="form-group">
     <input type="submit" class="btn btn-info" value="Bid">
