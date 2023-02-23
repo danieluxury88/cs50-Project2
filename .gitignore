@@ -5,3 +5,5 @@
 /.idea/commerce.iml
 /.idea/commerce.iml
 /.idea/misc.xml
+/db.sqlite3
+*.sqlite3

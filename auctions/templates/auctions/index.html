@@ -1,7 +1,27 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+<h2>Active Listings</h2>
 
-    TODO
+    {% for listing in active_listings %}
+    <div class="col">
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="{{listing.image_url}}" alt={{listing.title}}>
+            <div class="card-body">
+                <h5 class="card-title">{{listing.title}}</h5>
+                <p class="card-text">{{listing.description}}</p>
+            </div>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Current Price : ${{ listing.current_price }}</li>
+            <li class="list-group-item">Publisher: {{ listing.publisher }}</li>
+        </ul>
+        <div class="card-body">
+            <a href="#" class="card-link">View Details</a>
+            <a href="#" class="card-link">Add Watchlist</a>
+        </div>
+    </div>
+    <hr class="rounded">
+    {% endfor %}
+
 {% endblock %}

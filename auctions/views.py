@@ -8,7 +8,10 @@ from .models import User, Category, Auction
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    active_listings = Auction.objects.filter(status=True)
+    return render(request, "auctions/index.html", {
+        "active_listings" : active_listings,
+    })
 
 
 def login_view(request):
@@ -84,5 +87,4 @@ def publish(request):
                           image_url =auction_image_url, publisher = auction_publisher,
                           category = obj_category)
         auction.save()
-        return render(request, "auctions/index.html", {
-        })
+        return index(request)

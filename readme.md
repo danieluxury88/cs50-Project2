@@ -14,7 +14,7 @@ This project belongs to SQL, Models and Migrations chapter.
 - [x] Create superuser **python manage.py createsuperuser**
 - [x] Create models: user, auction listing, bids, comments and watchlist.
 - [x] Create listings: allow user to enter title, description, starting bid, image URL, category.
-- [ ] Active listings page: default page with active listings.
+- [x] Active listings page: default page with active listings.
 - [ ] Listings page: Clicking on a listing should take to listing details.
   - [ ] Add/Remove from watchlist.
   - [ ] Place valid bid.

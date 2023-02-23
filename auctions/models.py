@@ -18,7 +18,7 @@ class Auction(models.Model):
     description = models.CharField(max_length=500)
     starting_price = models.IntegerField()
     current_price = models.IntegerField()
-    image_url = models.URLField(max_length=100)
+    image_url = models.URLField(max_length=2083)
 
     publisher = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=None)
