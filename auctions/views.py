@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+
 
 from .models import User, Category, Auction, Comment
 
@@ -104,7 +106,10 @@ def post_comment(request):
     comment = request.POST["comment"]
     auction_id = request.POST["auction_id"]
     auction = Auction.objects.get(pk=auction_id)
-    auction_comment = Comment(comment=comment, author=author, auction=auction)
-    auction_comment.save()
+    if not comment:
+        messages.warning(request, 'Not empty messages allowed')
+    else:
+        auction_comment = Comment(comment=comment, author=author, auction=auction)
+        auction_comment.save()
 
     return details(request, auction_id)
