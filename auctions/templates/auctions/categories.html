@@ -1,6 +1,14 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+<form action=" {% url 'categories' %} " method="POST">
+  {% csrf_token %}
+<div class="btn-group" role="group" aria-label="Basic example">
+  {% for category in categories %}
+    <button type="submit" class="btn btn-secondary"  name = "category" value ={{ category.name }} >{{ category.name }} </button>
+  {% endfor %}
+</div>
+</form>
 
 {% for listing in listings %}
 <div class="col">
@@ -20,7 +28,4 @@
 
 <hr class="rounded">
 {% endfor %}
-
 {% endblock %}
-
-

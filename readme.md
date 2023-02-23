@@ -22,5 +22,5 @@ This project belongs to SQL, Models and Migrations chapter.
   - [x] Notify if auction has been won.
   - [x] Allow comments.
 - [x] Watchlist page.
-- [ ] Categories page.
-- [ ] Admin interface to view, add, edit, delete listings, comments and bids.
+- [x] Categories page.
+- [x] Admin interface to view, add, edit, delete listings, comments and bids.

@@ -163,3 +163,18 @@ def won_listings(request):
     return render(request, "auctions/index.html", {
         "listings": won_auctions,
     })
+
+
+def categories(request):
+    categories = get_all_categories()
+    if (request.method == "POST"):
+        category = request.POST["category"]
+        listing = get_all_active_listings_in_category(category)
+        return render(request, "auctions/categories.html", {
+            "categories": categories,
+            "listings": listing,
+        })
+    else:
+        return render(request, "auctions/categories.html", {
+            "categories": categories
+        })

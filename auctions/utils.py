@@ -46,6 +46,15 @@ def get_all_categories():
     return Category.objects.all()
 
 
+def get_category(category_name):
+    return Category.objects.get(name=category_name)
+
+
+def get_all_active_listings_in_category(category_name):
+    category = get_category(category_name)
+    return Auction.objects.filter(category=category)
+
+
 def get_auction_comments(auction):
     return Comment.objects.filter(auction=auction)
 
