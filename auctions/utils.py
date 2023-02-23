@@ -39,7 +39,7 @@ def get_item_on_watchlist(user, auction_id):
 
 
 def get_auctions_watched_by_user(user):
-    return Watchlist.objects.filter(user=user).only('item')
+    return Auction.objects.filter(watchlist__user=user)
 
 
 def get_all_categories():

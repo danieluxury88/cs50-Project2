@@ -152,11 +152,7 @@ def toggle_watchlist(request):
 
 
 def view_watchlist(request):
-    watchlist_items = get_auctions_watched_by_user(request.user)
-    watchlist = []
-    for watchlist_item in watchlist_items:
-        watchlist.append(watchlist_item.item)
-
+    watchlist = get_auctions_watched_by_user(request.user)
     return render(request, "auctions/index.html", {
         "listings": watchlist,
     })
