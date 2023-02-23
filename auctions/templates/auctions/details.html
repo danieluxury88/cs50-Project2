@@ -60,9 +60,13 @@
     </form>
     {% endif %}
 {% else %}
-<div class="form-group">
-    <input type="submit" class="btn btn-info" value="Bid">
-</div>
+<form action ="{%  url 'post_bid' auction.id %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="number" name="offered_price" class="form-control"  placeholder="$$$"></input>
+        <input type="submit" class="btn btn-info" value="Bid">
+    </div>
+</form>
 {% endif %}
 
 {% endblock %}

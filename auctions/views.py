@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 
-from .models import User, Category, Auction, Comment
+from .models import User, Category, Auction, Comment, Bid
 
 
 def index(request):
@@ -121,6 +121,22 @@ def close_auction(request, auction_id):
     auction.save()
     messages.warning(request, 'Auction closed!')
     return details(request, auction_id)
+
+
+def post_bid(request, auction_id):
+    if request.method == "POST":
+        auction = Auction.objects.get(pk=auction_id)
+        offered_price = int(request.POST["offered_price"])
+        if offered_price <= auction.current_price:
+            messages.warning(request, 'Bid should be higher than current price')
+        else:
+            auction.current_price = offered_price
+            auction.save()
+            bid = Bid(amount=offered_price, bidder=request.user, item=auction)
+            bid.save()
+            messages.success(request, 'Bid placed!')
+
+        return details(request, auction_id)
 
 
 

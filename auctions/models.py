@@ -25,14 +25,20 @@ class Auction(models.Model):
     status = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.title} Publisher: {self.publisher}"
+        state = "active" if self.status else "inactive"
+        output = "{:>30}\tPublisher: {:>10}\t Status:{:>10}".format(self.title, self.publisher.username, state)
+        print(output)
+        return output
 
 
 class Bid(models.Model):
     amount = models.FloatField()
     bidder = models.ForeignKey(User, on_delete=models.CASCADE)
-    item = models.ForeignKey(Auction, on_delete=models.CASCADE)
+    item = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name="winner")
     date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.item} bidder: {self.bidder} amount: {self.amount}"
 
 
 class Comment(models.Model):

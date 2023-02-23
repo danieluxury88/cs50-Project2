@@ -16,11 +16,11 @@ This project belongs to SQL, Models and Migrations chapter.
 - [x] Create listings: allow user to enter title, description, starting bid, image URL, category.
 - [x] Active listings page: default page with active listings.
 - [ ] Listings page: Clicking on a listing should take to listing details.
-  - [ ] Add/Remove from watchlist.
-  - [ ] Place valid bid.
-  - [ ] If owner, ability to close bid.
+  - [x] Add/Remove from watchlist.
+  - [x] Place valid bid.
+  - [x] If owner, ability to close bid.
   - [ ] Notify if auction has been won.
-  - [ ] Allow comments.
+  - [x] Allow comments.
 - [ ] Watchlist page.
 - [ ] Categories page.
 - [ ] Admin interface to view, add, edit, delete listings, comments and bids.
