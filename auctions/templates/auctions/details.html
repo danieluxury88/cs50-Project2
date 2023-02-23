@@ -3,11 +3,11 @@
 {% block body %}
 
 {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
-        </div>
-    {% endfor %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }}">
+    {{ message }}
+</div>
+{% endfor %}
 {% endif %}
 
 <img src="{{auction.image_url}}" class="img-fluid" alt="vehicle image">
@@ -25,48 +25,68 @@
 
 <h5 class="mb-1">Comments:</h5>
 {% for comment in comments %}
-    <div class="list-group">
-      <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+<div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{comment.comment}}</h5>
-          <small>{{comment.date}}</small>
+            <h5 class="mb-1">{{comment.comment}}</h5>
+            <small>{{comment.date}}</small>
         </div>
         <small>{{comment.author}}</small>
-      </a>
-    </div>
+    </a>
+</div>
 </br>
 {% empty %}
-    <h6 class="mb-1">No Comments</h6>
+<h6 class="mb-1">No Comments</h6>
 {% endfor %}
 </br>
 
 
-<form action ="{%  url 'post_comment' %}" method="POST">
+<form action="{%  url 'post_comment' %}" method="POST">
     {% csrf_token %}
     <div class="form-group">
-        <textarea name="comment" class="form-control" id="add_comment" rows="2" placeholder="Add question/comment"></textarea>
+        <textarea name="comment" class="form-control" id="add_comment" rows="2"
+                  placeholder="Add question/comment"></textarea>
         <input type="submit" class="btn btn-info" value="Add Comment">
         <input type="hidden" name="auction_id" value="{{auction.id}}">
     </div>
 </form>
 
 {% if auction.publisher == user %}
-    {% if auction.status == True %}
-    <form action ="{% url 'close_auction' auction.id %}" method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <input type="submit" value="Close auction">
-        </div>
-    </form>
-    {% endif %}
-{% else %}
-<form action ="{%  url 'post_bid' auction.id %}" method="POST">
+{% if auction.status == True %}
+<form action="{% url 'close_auction' auction.id %}" method="POST">
     {% csrf_token %}
     <div class="form-group">
-        <input type="number" name="offered_price" class="form-control"  placeholder="$$$"></input>
-        <input type="submit" class="btn btn-info" value="Bid">
+        <input type="submit" value="Close auction">
     </div>
 </form>
+{% endif %}
+{% else %}
+<div class="row">
+    <div class="col">
+        <form action="{%  url 'toggle_watchlist' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {% if not is_on_watchlist %}
+                    <input type="submit" class="btn btn-info" value="Add Watchlist">
+                {% else %}
+                    <input type="submit" class="btn btn-info" value="Remove Watchlist">
+                {% endif %}
+                <input type="hidden" name="auction_id" value="{{ auction.id }}">
+            </div>
+        </form>
+    </div>
+    <div class="col">
+        <form action="{%  url 'post_bid' auction.id %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="number" name="offered_price" class="form-control" placeholder="$$$"></input>
+                <input type="submit" class="btn btn-info" value="Bid">
+            </div>
+        </form>
+    </div>
+</div>
+
+
 {% endif %}
 
 {% endblock %}

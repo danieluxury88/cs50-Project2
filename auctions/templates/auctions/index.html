@@ -3,7 +3,7 @@
 {% block body %}
 <h2>Active Listings</h2>
 
-{% for listing in active_listings %}
+{% for listing in listings %}
 <div class="col">
     <div class="card" style="width: 18rem;">
         <img class="card-img-top" src="{{listing.image_url}}" alt={{listing.title}}>
@@ -15,7 +15,6 @@
         </div>
         <div class="card-body">
             <a href="{% url 'details' listing.id %}" class="card-link">View Details</a>
-            <a href="#" class="card-link">Add Watchlist</a>
         </div>
     </div>
 </div>
@@ -24,3 +23,5 @@
 {% endfor %}
 
 {% endblock %}
+
+

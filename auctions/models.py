@@ -27,7 +27,6 @@ class Auction(models.Model):
     def __str__(self):
         state = "active" if self.status else "inactive"
         output = "{:>30}\tPublisher: {:>10}\t Status:{:>10}".format(self.title, self.publisher.username, state)
-        print(output)
         return output
 
 
@@ -51,6 +50,11 @@ class Comment(models.Model):
         return f"{self.author} said: {self.comment}"
 
 
-class WatchList(models.Model):
+class Watchlist(models.Model):
     item = models.ForeignKey(Auction, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user}\t\tItem: {self.item}"
+
+

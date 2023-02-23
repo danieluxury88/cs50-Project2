@@ -6,13 +6,13 @@ from django.shortcuts import render
 from django.urls import reverse
 
 
-from .models import User, Category, Auction, Comment, Bid
+from .models import User, Category, Auction, Comment, Bid, Watchlist
 
 
 def index(request):
     active_listings = Auction.objects.filter(status=True)
     return render(request, "auctions/index.html", {
-        "active_listings": active_listings,
+        "listings": active_listings,
     })
 
 
@@ -92,12 +92,24 @@ def publish(request):
         return index(request)
 
 
+def is_item_on_watchlist(user, auction_id):
+    auction = Auction.objects.get(pk=auction_id)
+    watchlist = Watchlist.objects.filter(item = auction, user = user)
+    return watchlist.exists()
+
+def get_item_on_watchlist(user, auction_id):
+    auction = Auction.objects.get(pk=auction_id)
+    watchlist_item = Watchlist.objects.filter(item = auction, user = user)
+    return watchlist_item
+
 def details(request, auction_id):
+    is_on_watchlist = is_item_on_watchlist(request.user, auction_id)
     auction = Auction.objects.get(pk=auction_id)
     comments = Comment.objects.filter(auction=auction)
     return render(request, 'auctions/details.html', {
         "auction": auction,
         "comments": comments,
+        "is_on_watchlist": is_on_watchlist,
     })
 
 
@@ -137,6 +149,31 @@ def post_bid(request, auction_id):
             messages.success(request, 'Bid placed!')
 
         return details(request, auction_id)
+
+
+def toggle_watchlist(request):
+    if request.method == "POST":
+        auction_id = request.POST["auction_id"]
+        auction = Auction.objects.get(pk=auction_id)
+        watchlist_item = get_item_on_watchlist(request.user, auction_id)
+        if watchlist_item.exists():
+            watchlist_item.delete()
+        else:
+            watchlist = Watchlist(item=auction, user=request.user)
+            watchlist.save()
+
+        return details(request, auction_id)
+
+
+def view_watchlist(request):
+    watchlist_items = Watchlist.objects.filter(user=request.user).only('item')
+    watchlist = []
+    for watchlist_item in watchlist_items:
+        watchlist.append(watchlist_item.item)
+
+    return render(request, "auctions/index.html", {
+        "listings": watchlist,
+    })
 
 
 
