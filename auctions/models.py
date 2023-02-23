@@ -26,8 +26,8 @@ class Auction(models.Model):
 
     def __str__(self):
         state = "active" if self.status else "inactive"
-        output = "{:>30}\tPublisher: {:>10}\t Status:{:>10}".format(self.title, self.publisher.username, state)
-        return output
+        # output = "{:>30}\tPublisher: {:>10}\t Status:{:>10}".format(self.title, self.publisher.username, state)
+        return f"{self.title} Publisher: { self.publisher} State: {state} Current Price: {self.current_price}"
 
 
 class Bid(models.Model):

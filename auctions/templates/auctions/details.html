@@ -10,6 +10,12 @@
 {% endfor %}
 {% endif %}
 
+{% if auction_won %}
+<div class="alert alert-success" role="alert">
+  You won this auction!
+</div>
+{% endif %}
+
 <img src="{{auction.image_url}}" class="img-fluid" alt="vehicle image">
 <h3>{{ auction.title }}</h3>
 <div>
@@ -75,15 +81,17 @@
             </div>
         </form>
     </div>
-    <div class="col">
-        <form action="{%  url 'post_bid' auction.id %}" method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <input type="number" name="offered_price" class="form-control" placeholder="$$$"></input>
-                <input type="submit" class="btn btn-info" value="Bid">
-            </div>
-        </form>
-    </div>
+    {% if auction.status %}
+        <div class="col">
+            <form action="{%  url 'post_bid' auction.id %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="number" name="offered_price" class="form-control" placeholder="$$$"></input>
+                    <input type="submit" class="btn btn-info" value="Bid">
+                </div>
+            </form>
+        </div>
+    {% endif %}
 </div>
 
 

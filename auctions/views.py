@@ -1,19 +1,12 @@
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-
-from .models import User, Category, Auction, Comment, Bid, Watchlist
-
-
-def index(request):
-    active_listings = Auction.objects.filter(status=True)
-    return render(request, "auctions/index.html", {
-        "listings": active_listings,
-    })
+from .models import User
+from .utils import *
 
 
 def login_view(request):
@@ -68,9 +61,16 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
+def index(request):
+    active_listings = get_all_active_listings()
+    return render(request, "auctions/index.html", {
+        "listings": active_listings,
+    })
+
+
 def publish(request):
     if request.method == "GET":
-        categories = Category.objects.all()
+        categories = get_all_categories()
         return render(request, "auctions/publish.html", {
             "categories": categories,
         })
@@ -92,24 +92,16 @@ def publish(request):
         return index(request)
 
 
-def is_item_on_watchlist(user, auction_id):
-    auction = Auction.objects.get(pk=auction_id)
-    watchlist = Watchlist.objects.filter(item = auction, user = user)
-    return watchlist.exists()
-
-def get_item_on_watchlist(user, auction_id):
-    auction = Auction.objects.get(pk=auction_id)
-    watchlist_item = Watchlist.objects.filter(item = auction, user = user)
-    return watchlist_item
-
 def details(request, auction_id):
     is_on_watchlist = is_item_on_watchlist(request.user, auction_id)
-    auction = Auction.objects.get(pk=auction_id)
-    comments = Comment.objects.filter(auction=auction)
+    auction = get_auction(auction_id)
+    comments = get_auction_comments(auction)
+    auction_won = is_auction_winner(auction, request.user)
     return render(request, 'auctions/details.html', {
         "auction": auction,
         "comments": comments,
         "is_on_watchlist": is_on_watchlist,
+        "auction_won": auction_won,
     })
 
 
@@ -117,7 +109,7 @@ def post_comment(request):
     author = request.user
     comment = request.POST["comment"]
     auction_id = request.POST["auction_id"]
-    auction = Auction.objects.get(pk=auction_id)
+    auction = get_auction(auction_id)
     if not comment:
         messages.warning(request, 'Not empty messages allowed')
     else:
@@ -128,33 +120,27 @@ def post_comment(request):
 
 
 def close_auction(request, auction_id):
-    auction = Auction.objects.get(pk=auction_id)
-    auction.status = False
-    auction.save()
+    finalize_auction(auction_id)
     messages.warning(request, 'Auction closed!')
     return details(request, auction_id)
 
 
 def post_bid(request, auction_id):
     if request.method == "POST":
-        auction = Auction.objects.get(pk=auction_id)
+        auction = get_auction(auction_id)
         offered_price = int(request.POST["offered_price"])
         if offered_price <= auction.current_price:
             messages.warning(request, 'Bid should be higher than current price')
         else:
-            auction.current_price = offered_price
-            auction.save()
-            bid = Bid(amount=offered_price, bidder=request.user, item=auction)
-            bid.save()
+            accept_bid(auction, offered_price, request)
             messages.success(request, 'Bid placed!')
-
         return details(request, auction_id)
 
 
 def toggle_watchlist(request):
     if request.method == "POST":
         auction_id = request.POST["auction_id"]
-        auction = Auction.objects.get(pk=auction_id)
+        auction = get_auction(auction_id)
         watchlist_item = get_item_on_watchlist(request.user, auction_id)
         if watchlist_item.exists():
             watchlist_item.delete()
@@ -166,7 +152,7 @@ def toggle_watchlist(request):
 
 
 def view_watchlist(request):
-    watchlist_items = Watchlist.objects.filter(user=request.user).only('item')
+    watchlist_items = get_auctions_watched_by_user(request.user)
     watchlist = []
     for watchlist_item in watchlist_items:
         watchlist.append(watchlist_item.item)
@@ -176,5 +162,8 @@ def view_watchlist(request):
     })
 
 
-
-
+def won_listings(request):
+    won_auctions = get_all_auctions_won_by_user(request.user)
+    return render(request, "auctions/index.html", {
+        "listings": won_auctions,
+    })

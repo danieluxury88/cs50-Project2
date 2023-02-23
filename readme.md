@@ -15,12 +15,12 @@ This project belongs to SQL, Models and Migrations chapter.
 - [x] Create models: user, auction listing, bids, comments and watchlist.
 - [x] Create listings: allow user to enter title, description, starting bid, image URL, category.
 - [x] Active listings page: default page with active listings.
-- [ ] Listings page: Clicking on a listing should take to listing details.
+- [x] Listings page: Clicking on a listing should take to listing details.
   - [x] Add/Remove from watchlist.
   - [x] Place valid bid.
   - [x] If owner, ability to close bid.
-  - [ ] Notify if auction has been won.
+  - [x] Notify if auction has been won.
   - [x] Allow comments.
-- [ ] Watchlist page.
+- [x] Watchlist page.
 - [ ] Categories page.
 - [ ] Admin interface to view, add, edit, delete listings, comments and bids.
