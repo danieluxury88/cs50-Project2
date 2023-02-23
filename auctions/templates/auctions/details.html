@@ -15,21 +15,32 @@
     </div>
 </div>
 
-<div class="list-group">
-  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{comments.comment}}</h5>
-      <small>{{comments.date}}</small>
+<h5 class="mb-1">Comments:</h5>
+{% for comment in comments %}
+    <div class="list-group">
+      <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{comment.comment}}</h5>
+          <small>{{comment.date}}</small>
+        </div>
+        <small>{{comment.author}}</small>
+      </a>
     </div>
-    <small>{{comments.author}}</small>
-  </a>
-</div>
-
 </br>
-<div class="form-group">
-    <textarea name="add_comment" class="form-control" id="add_comment" rows="2" placeholder="Add question/comment"></textarea>
-    <input type="submit" class="btn btn-info" value="Add Comment">
-</div>
+{% empty %}
+    <h6 class="mb-1">No Comments</h6>
+{% endfor %}
+</br>
+
+
+<form action ="{%  url 'post_comment' %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <textarea name="comment" class="form-control" id="add_comment" rows="2" placeholder="Add question/comment"></textarea>
+        <input type="submit" class="btn btn-info" value="Add Comment">
+        <input type="hidden" name="auction_id" value="{{auction.id}}">
+    </div>
+</form>
 
 {% if auction.publisher == user %}
 <div class="form-group">

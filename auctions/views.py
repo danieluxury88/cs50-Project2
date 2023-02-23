@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -10,7 +10,7 @@ from .models import User, Category, Auction, Comment
 def index(request):
     active_listings = Auction.objects.filter(status=True)
     return render(request, "auctions/index.html", {
-        "active_listings" : active_listings,
+        "active_listings": active_listings,
     })
 
 
@@ -81,26 +81,30 @@ def publish(request):
         auction_image_url = request.POST["image_url"]
         auction_publisher = request.user
 
-        auction = Auction(title=auction_title, description =auction_description,
-                          starting_price =  auction_starting_price,
-                          current_price = auction_starting_price,
-                          image_url =auction_image_url, publisher = auction_publisher,
-                          category = obj_category)
+        auction = Auction(title=auction_title, description=auction_description,
+                          starting_price=auction_starting_price,
+                          current_price=auction_starting_price,
+                          image_url=auction_image_url, publisher=auction_publisher,
+                          category=obj_category)
         auction.save()
         return index(request)
 
 
 def details(request, auction_id):
-    # if request.method == "GET":
-        print(f" valor {auction_id}")
-        auction = Auction.objects.get(pk = auction_id)
-        comments = Comment.objects.get(auction= auction)
-        comment1 = Comment.objects.first()
-        comment2 = Comment.objects.last()
+    auction = Auction.objects.get(pk=auction_id)
+    comments = Comment.objects.filter(auction=auction)
+    return render(request, 'auctions/details.html', {
+        "auction": auction,
+        "comments": comments,
+    })
 
-        print(comment1.comment)
-        print(comment2.comment)
-        return render(request, 'auctions/details.html', {
-            "auction": auction,
-            "comments": comments,
-        })
+
+def post_comment(request):
+    author = request.user
+    comment = request.POST["comment"]
+    auction_id = request.POST["auction_id"]
+    auction = Auction.objects.get(pk=auction_id)
+    auction_comment = Comment(comment=comment, author=author, auction=auction)
+    auction_comment.save()
+
+    return details(request, auction_id)

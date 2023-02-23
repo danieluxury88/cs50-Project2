@@ -42,7 +42,7 @@ class Comment(models.Model):
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
-        return f"{self.commenter} said: {self.comment}"
+        return f"{self.author} said: {self.comment}"
 
 
 class WatchList(models.Model):
