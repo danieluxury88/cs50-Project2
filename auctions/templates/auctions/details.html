@@ -1,0 +1,44 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<img src="{{auction.image_url}}" class="img-fluid" alt="vehicle image">
+<h3>{{ auction.title }}</h3>
+<div>
+    <div class="row">
+        <div class="col">
+            <p> {{ auction.description }}</p>
+        </div>
+        <div class="col">
+            <p> Current Price: $ {{ auction.current_price }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{comments.comment}}</h5>
+      <small>{{comments.date}}</small>
+    </div>
+    <small>{{comments.author}}</small>
+  </a>
+</div>
+
+</br>
+<div class="form-group">
+    <textarea name="add_comment" class="form-control" id="add_comment" rows="2" placeholder="Add question/comment"></textarea>
+    <input type="submit" class="btn btn-info" value="Add Comment">
+</div>
+
+{% if auction.publisher == user %}
+<div class="form-group">
+    <input type="submit" class="btn btn-info" value="Close auction">
+</div>
+{% else %}
+<div class="form-group">
+    <input type="submit" class="btn btn-info" value="Bid">
+</div>
+{% endif %}
+
+{% endblock %}

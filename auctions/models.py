@@ -24,7 +24,6 @@ class Auction(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=None)
     status = models.BooleanField(default=True)
 
-
     def __str__(self):
         return f"{self.title} Publisher: {self.publisher}"
 
@@ -38,8 +37,12 @@ class Bid(models.Model):
 
 class Comment(models.Model):
     comment = models.CharField(max_length=500)
-    commenter = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
+    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, default=None)
+
+    def __str__(self):
+        return f"{self.commenter} said: {self.comment}"
 
 
 class WatchList(models.Model):

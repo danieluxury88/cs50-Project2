@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Category, Auction
+from .models import User, Category, Auction, Comment
 
 
 def index(request):
@@ -88,3 +88,19 @@ def publish(request):
                           category = obj_category)
         auction.save()
         return index(request)
+
+
+def details(request, auction_id):
+    # if request.method == "GET":
+        print(f" valor {auction_id}")
+        auction = Auction.objects.get(pk = auction_id)
+        comments = Comment.objects.get(auction= auction)
+        comment1 = Comment.objects.first()
+        comment2 = Comment.objects.last()
+
+        print(comment1.comment)
+        print(comment2.comment)
+        return render(request, 'auctions/details.html', {
+            "auction": auction,
+            "comments": comments,
+        })
